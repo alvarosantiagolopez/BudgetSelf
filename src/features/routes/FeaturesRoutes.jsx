@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { BanksPage, BudgetsPage, CalculatorsPage, DashboardPage, InvestmentsPage } from '../../features'
+import { NavBar } from '../../components/NavBar';
 
 
 
@@ -7,7 +8,7 @@ export const FeaturesRoutes = () => {
     return (
         <>
 
-            {/* TODO: Navbar */}
+            <NavBar />
 
             <Routes>
                 <Route path="dashboard" element={<DashboardPage />} />

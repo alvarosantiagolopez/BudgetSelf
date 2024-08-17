@@ -1,9 +1,11 @@
+import { Toolbar, Typography } from "@mui/material"
 
 
 export const BanksPage = () => {
     return (
         <>
-            <h1>BanksPage</h1>
+            <Toolbar />
+            <Typography variant='h1'>BanksPage</Typography>
         </>
     )
 }
