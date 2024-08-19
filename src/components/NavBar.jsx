@@ -56,10 +56,10 @@ export const NavBar = () => {
                         component='div'
                         sx={{
                             flexGrow: 1,
-                            textAlign: 'center', // Asegura que BudgetSelf esté centrado
+                            textAlign: 'center',
                             fontSize: { xs: '1.2rem', sm: '1.5rem' },
                             position: 'relative',
-                            zIndex: 9, // Asegura que esté por debajo del IconButton
+                            zIndex: 9,
                         }}
                     >
                         BudgetSelf
@@ -86,7 +86,7 @@ export const NavBar = () => {
                         variant='outlined'
                         color="secondary"
                         component={NavLink}
-                        to="login"
+                        to="auth/login"
                         sx={{
                             textTransform: 'capitalize',
                             color: 'secondary.main',
