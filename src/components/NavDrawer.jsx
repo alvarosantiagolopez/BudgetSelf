@@ -1,14 +1,6 @@
 import { Drawer, List, ListItem, ListItemText, Box } from '@mui/material';
 import { NavLink } from 'react-router-dom';
-
-const menuItems = [
-    { text: 'Dashboard', to: 'dashboard' },
-    { text: 'Budgets', to: 'budgets' },
-    { text: 'Banks', to: 'banks' },
-    { text: 'Investments', to: 'investments' },
-    { text: 'Calculators', to: 'calculators' },
-    { text: 'Logout', to: 'login', variant: 'outlined' },
-];
+import { menuItems } from '../config/menuItems';
 
 export const NavDrawer = ({ isOpen, toggleDrawer }) => {
     return (

@@ -6,6 +6,7 @@ import { MenuOutlined } from '@mui/icons-material';
 
 import { NavDrawer } from './NavDrawer';
 import { NavButton } from './NavButton';
+import { menuItems } from '../config/menuItems';
 
 export const NavBar = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -15,7 +16,6 @@ export const NavBar = () => {
             return;
         }
         setDrawerOpen(open);
-        document.body.style.overflow = open ? 'hidden' : 'auto'; // Desactiva el scroll en el body
     };
 
     return (
@@ -30,7 +30,7 @@ export const NavBar = () => {
                 <Toolbar
                     sx={{
                         display: 'flex',
-                        justifyContent: 'space-between',
+                        justifyContent: 'center',
                         alignItems: 'center',
                         position: 'relative',
                     }}
@@ -38,14 +38,12 @@ export const NavBar = () => {
                     <IconButton
                         color='secondary'
                         edge="start"
-                        onClick={toggleDrawer(true)}
+                        onClick={toggleDrawer(!drawerOpen)}
                         sx={{
                             display: { xs: 'block', sm: 'none' },
                             position: 'absolute',
-                            left: '0.5rem',
-                            top: '50%',
-                            transform: 'translateY(-50%)',
-                            zIndex: 10,
+                            left: '1rem',
+                            top: '8px',
                         }}
                     >
                         <MenuOutlined />
@@ -59,7 +57,6 @@ export const NavBar = () => {
                             textAlign: 'center',
                             fontSize: { xs: '1.2rem', sm: '1.5rem' },
                             position: 'relative',
-                            zIndex: 9,
                         }}
                     >
                         BudgetSelf
@@ -75,18 +72,16 @@ export const NavBar = () => {
                             display: { xs: 'none', sm: 'flex' },
                         }}
                     >
-                        <NavButton to="dashboard">Dashboard</NavButton>
-                        <NavButton to="budgets">Budgets</NavButton>
-                        <NavButton to="banks">Banks</NavButton>
-                        <NavButton to="investments">Investments</NavButton>
-                        <NavButton to="calculators">Calculators</NavButton>
+                        {menuItems.slice(0, -1).map(({ text, to }) => (
+                            <NavButton key={text} to={to}>{text}</NavButton>
+                        ))}
                     </Grid>
 
                     <Button
                         variant='outlined'
                         color="secondary"
                         component={NavLink}
-                        to="auth/login"
+                        to={menuItems[menuItems.length - 1].to}
                         sx={{
                             textTransform: 'capitalize',
                             color: 'secondary.main',
@@ -100,7 +95,7 @@ export const NavBar = () => {
                             },
                         }}
                     >
-                        Logout
+                        {menuItems[menuItems.length - 1].text}
                     </Button>
                 </Toolbar>
             </AppBar>
