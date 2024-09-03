@@ -6,6 +6,6 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: '0.0.0.0', // Esto permite que Vite escuche en todas las interfaces de red
-    port: 5173, // El puerto que estás utilizando
+    port: 3000, // El puerto que estás utilizando
   },
 })
