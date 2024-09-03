@@ -23,7 +23,7 @@ export const NavBar = () => {
             <AppBar
                 position='fixed'
                 sx={{
-                    padding: '0rem 3rem',
+                    padding: '0rem 2rem',
                     zIndex: 1201, // Asegura que la AppBar esté por encima del Drawer
                 }}
             >
