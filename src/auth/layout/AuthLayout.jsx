@@ -78,8 +78,8 @@ export const AuthLayout = ({ children, title = '' }) => {
                         '@media (max-width: 600px)': {
                             marginBottom: '0.1rem',
                             marginLeft: '0.5rem',
-                            textAlign: 'left', // Alineación a la izquierda en móvil
-                            fontSize: '1.5rem', // Reducir el tamaño de la fuente en móviles
+                            textAlign: 'left',
+                            fontSize: '1.5rem',
                         },
                     }}
                 >
