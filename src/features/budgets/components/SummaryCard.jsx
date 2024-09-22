@@ -1,12 +1,14 @@
-import { Grid, Paper, Typography } from '@mui/material'
+import { Grid, Paper, Typography } from '@mui/material';
 
 export const SummaryCard = ({ title, amount }) => {
-
     const amountColor = title.toLowerCase().includes('expenses') ? 'expenses.main' : 'income.main';
 
     return (
         <Grid item xs={12} sm={2}>
-            <Paper sx={{ padding: '1.5rem', textAlign: 'center' }}>
+            <Paper
+                sx={{ padding: '1.5rem', textAlign: 'center' }}
+                elevation={3}
+            >
                 <Typography
                     variant="h6"
                     sx={{
@@ -22,5 +24,5 @@ export const SummaryCard = ({ title, amount }) => {
                 </Typography>
             </Paper>
         </Grid>
-    )
-}
+    );
+};

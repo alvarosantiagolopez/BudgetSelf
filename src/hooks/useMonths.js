@@ -46,23 +46,25 @@ export const useMonths = () => {
     // Transacciones simuladas para cada mes
     const transactions = {
         Jan: [
-            { type: 'Income', transaction: 'Paycheck €1,800.00' },
+            { type: 'Income', name: 'Paycheck', date: '2024-01-01', amount: '€1,800.00' },
         ],
-
         Sep: [
-            { type: 'Income', transaction: 'Paycheck €2,000.00' },
-            { type: 'Essential expenses', transaction: 'Rent €500.00' },
-            { type: 'Non-essential expenses', transaction: 'Spotify €5.00' },
-            { type: 'Progress expenses', transaction: 'Stocks €200.00' },
+            { type: 'Income', name: 'Paycheck', date: '2024-09-01', amount: '€2,000.00' },
+            { type: 'Essential expenses', name: 'Rent', date: '2024-09-05', amount: '€500.00' },
+            { type: 'Non-essential expenses', name: 'Spotify', date: '2024-09-09', amount: '€5.00' },
+            { type: 'Non-essential expenses', name: 'Cream', date: '2024-09-07', amount: '€10.00' },
+            { type: 'Non-essential expenses', name: 'Shirt', date: '2024-09-20', amount: '€30.00' },
+            { type: 'Non-essential expenses', name: 'Cinema', date: '2024-09-11', amount: '€12.00' },
+            { type: 'Non-essential expenses', name: 'Jeans', date: '2024-09-13', amount: '€25.00' },
+            { type: 'Progress expenses', name: 'Stocks', date: '2024-09-10', amount: '€200.00' },
         ],
-
     };
 
-    // Obtener los datos del mes seleccionado
+    // Get month data
     const monthData = data[selectedMonth] || { income: '€0.00', expenses: '€0.00', savings: '€0.00' };
     const monthTransactions = transactions[selectedMonth] || [];
 
-    // Obtener el nombre completo del mes seleccionado
+    // Get full name
     const selectedMonthFullName = monthNames[selectedMonth];
 
     return {
