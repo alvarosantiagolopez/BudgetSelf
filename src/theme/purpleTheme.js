@@ -13,13 +13,24 @@ export const purpleTheme = createTheme({
         },
 
         income: {
-            main: green[700],
+            main: '#08b447'
         },
 
         expenses: {
-            main: red[700],
+            main: red[600]
         },
 
+        essential: {
+            main: '#f8bd4e'
+        },
 
+        nonessential: {
+            main: '#f8625c'
+        },
+
+        progress: {
+            //main: '#2690D7'
+            main: '#60B1F2'
+        },
     }
 })
