@@ -5,9 +5,9 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { es } from 'date-fns/locale';
 
 import { useForm, Controller } from 'react-hook-form';
+import { NumericFormat } from 'react-number-format';
 
-import { useUiStore } from '../hooks';
-
+import { useTransactionsStore, useUiStore } from '../hooks';
 
 const style = {
     position: 'absolute',
@@ -25,12 +25,14 @@ const style = {
 export const TransactionModal = () => {
 
     const { isTransactionModalOpen, closeTransactionModal } = useUiStore();
+    const { startAddingTransaction } = useTransactionsStore();
 
     // React Hook Form
     const {
         register,
         handleSubmit,
         control,
+        reset,
         formState: { errors },
     } = useForm({
         defaultValues: {
@@ -38,19 +40,30 @@ export const TransactionModal = () => {
             paymentMethod: 'ING',
             category: '',
             date: new Date(),
-            amount: 0,
+            description: '',
+            amount: '',
         },
     });
 
     const onSubmit = (data) => {
-        console.log('Form data:', data);
-        // manejar la lógica para enviar los datos al servidor o actualizar el estado global
+        const newTransaction = {
+            type: data.transactionType,
+            paymentMethod: data.paymentMethod,
+            category: data.category,
+            date: data.date.toISOString(),
+            description: data.description,
+            amount: parseFloat(data.amount.replace(/,/g, '')), // Convert to number
+        };
+
+        // Add transaction to the state
+        startAddingTransaction(newTransaction);
         closeTransactionModal();
+        reset();
     };
 
     const onCloseModal = () => {
-        console.log('Cerrando modal');
         closeTransactionModal();
+        reset();
     };
 
     return (
@@ -74,10 +87,9 @@ export const TransactionModal = () => {
                     New expense/income
                 </Typography>
 
-
                 {/* Form */}
                 <form onSubmit={handleSubmit(onSubmit)}>
-
+                    {/* Transaction Type */}
                     <Controller
                         name="transactionType"
                         control={control}
@@ -98,7 +110,7 @@ export const TransactionModal = () => {
                         )}
                     />
 
-                    {/*Payment Method */}
+                    {/* Payment Method */}
                     <Controller
                         name="paymentMethod"
                         control={control}
@@ -134,9 +146,10 @@ export const TransactionModal = () => {
                                     labelId="category-label"
                                     label="Category"
                                 >
-                                    <MenuItem value="Gym membership">Gym membership</MenuItem>
-                                    <MenuItem value="Food">Food</MenuItem>
-                                    <MenuItem value="Transport">Transport</MenuItem>
+                                    <MenuItem value="Paycheck">Paycheck</MenuItem>
+                                    <MenuItem value="Rent">Rent</MenuItem>
+                                    <MenuItem value="Clothes">Clothes</MenuItem>
+                                    <MenuItem value="Investments">Investments</MenuItem>
                                 </Select>
                                 {error && (
                                     <Typography variant="caption" color="error">
@@ -172,18 +185,52 @@ export const TransactionModal = () => {
                         />
                     </LocalizationProvider>
 
-                    {/* Amount */}
+                    {/* Description */}
                     <TextField
-                        label="Amount"
-                        {...register('amount', { required: true })}
-                        type="number"
+                        label="Description"
+                        {...register('description', { required: 'Description is required' })}
                         fullWidth
                         sx={{
-                            marginBottom: '2rem',
-                            input: { fontWeight: 'bold' },
+                            marginBottom: '1rem',
                         }}
-                        error={!!errors.amount}
-                        helperText={errors.amount ? 'Amount is required' : ''}
+                        error={!!errors.description}
+                        helperText={errors.description ? errors.description.message : ''}
+                    />
+
+                    {/* Amount */}
+                    <Controller
+                        name="amount"
+                        control={control}
+                        rules={{
+                            required: 'Amount is required',
+                            validate: (value) => {
+                                const amount = parseFloat(value.replace(/,/g, ''));
+                                return amount >= 0.01 || 'Amount must be at least 0.01';
+                            },
+                        }}
+                        render={({ field: { onChange, name, value }, fieldState: { error } }) => (
+                            <NumericFormat
+                                value={value}
+                                name={name}
+                                label="Amount"
+                                customInput={TextField}
+                                fullWidth
+                                sx={{
+                                    marginBottom: '2rem',
+                                    input: { fontWeight: 'bold' },
+                                }}
+                                thousandSeparator=","
+                                decimalSeparator="."
+                                decimalScale={2}
+                                fixedDecimalScale
+                                allowNegative={false}
+                                error={!!error}
+                                helperText={error ? error.message : ''}
+                                onValueChange={(values) => {
+                                    onChange(values.value);
+                                }}
+                            />
+                        )}
                     />
 
                     {/* Save button */}
@@ -192,7 +239,7 @@ export const TransactionModal = () => {
                             type="submit"
                             variant="contained"
                             sx={{
-                                paddingInline: "3.5rem",
+                                paddingInline: '3.5rem',
                                 backgroundColor: 'primary.main',
                                 color: 'white',
                                 borderRadius: '20px',

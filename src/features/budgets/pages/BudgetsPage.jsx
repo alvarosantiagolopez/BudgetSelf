@@ -4,11 +4,12 @@ import { Add } from '@mui/icons-material';
 import { TransactionModal, MonthNavigation } from '../../../components';
 import { SummaryCard, TransactionCard } from '../components';
 
-import { useGroupedTransactions, useMonths, useUiStore } from '../../../hooks';
+import { useGroupedTransactions, useMonths, useTransactionsStore, useUiStore } from '../../../hooks';
 
 export const BudgetsPage = () => {
 
     const { openTransactionModal } = useUiStore();
+    const { transactions } = useTransactionsStore();
 
     const onAddClick = () => {
         openTransactionModal();
@@ -18,12 +19,21 @@ export const BudgetsPage = () => {
 
     const {
         monthData,
-        monthTransactions = [],
         selectedMonthFullName,
+        selectedMonthIndex,
     } = monthsData;
 
+    const transactionTypes = [
+        'Income',
+        'Essential expense',
+        'Non-essential expense',
+        'Progress expense',
+    ];
 
-    const transactionTypes = ['Income', 'Essential expenses', 'Non-essential expenses', 'Progress expenses'];
+    // Filter transactions
+    const monthTransactions = transactions.filter(
+        (transaction) => new Date(transaction.date).getMonth() === selectedMonthIndex
+    );
 
     const groupedTransactions = useGroupedTransactions(monthTransactions, transactionTypes);
 
