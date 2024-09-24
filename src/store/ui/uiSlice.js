@@ -16,5 +16,5 @@ export const uiSlice = createSlice({
 });
 
 
-// Action creators are generated for each case reducer function
+// Action creators
 export const { onOpenTransactionModal, onCloseTransactionModal } = uiSlice.actions;

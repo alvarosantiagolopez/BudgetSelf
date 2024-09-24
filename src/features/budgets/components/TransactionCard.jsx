@@ -5,15 +5,15 @@ export const TransactionCard = ({ type, transactions = [] }) => {
 
     const typeColors = {
         'Income': 'income.main',
-        'Essential expenses': 'essential.main',
-        'Non-essential expenses': 'nonessential.main',
-        'Progress expenses': 'progress.main',
+        'Essential expense': 'essential.main',
+        'Non-essential expense': 'nonessential.main',
+        'Progress expense': 'progress.main',
     };
     const typeColor = typeColors[type] || 'primary.main';
 
     const amountColor = type === 'Income'
         ? 'income.main'
-        : type.includes('expenses')
+        : type.includes('expense')
             ? 'expenses.main'
             : 'defaultColor';
 
@@ -28,8 +28,9 @@ export const TransactionCard = ({ type, transactions = [] }) => {
             <Paper
                 sx={{
                     padding: '1.5rem',
-                    minHeight: '375px',
-                    maxHeight: '375px',
+                    minHeight: '300px',
+                    maxHeight: '300px',
+                    overflowY: 'auto',
                 }}
                 elevation={3}
             >
@@ -48,7 +49,14 @@ export const TransactionCard = ({ type, transactions = [] }) => {
                 {transactions.length > 0 ? (
                     transactions.slice(0, 5).map((transaction, index) => {
 
-                        const cleanedAmount = parseFloat(transaction.amount.replace(/[^0-9.-]+/g, ''));
+                        let cleanedAmount;
+                        if (typeof transaction.amount === 'string') {
+                            cleanedAmount = parseFloat(transaction.amount.replace(/[^0-9.-]+/g, ''));
+                        } else if (typeof transaction.amount === 'number') {
+                            cleanedAmount = transaction.amount;
+                        } else {
+                            cleanedAmount = 0;
+                        }
 
                         const formattedDate = format(new Date(transaction.date), 'MMMM d');
 
@@ -62,10 +70,11 @@ export const TransactionCard = ({ type, transactions = [] }) => {
                                     marginBottom: '1rem',
                                 }}
                             >
+
                                 {/* Transaction */}
                                 <Box>
                                     <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                                        {transaction.name}
+                                        {transaction.description}
                                     </Typography>
                                     <Typography variant="body2" sx={{ color: 'gray' }}>
                                         {formattedDate}
