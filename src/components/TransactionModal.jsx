@@ -36,7 +36,7 @@ export const TransactionModal = () => {
         formState: { errors },
     } = useForm({
         defaultValues: {
-            transactionType: 'Non-essential expense',
+            transactionType: 'Non-essential expenses',
             paymentMethod: 'ING',
             category: '',
             date: new Date(),
@@ -102,9 +102,9 @@ export const TransactionModal = () => {
                                     label="Transaction type"
                                 >
                                     <MenuItem value="Income">Income</MenuItem>
-                                    <MenuItem value="Essential expense">Essential expense</MenuItem>
-                                    <MenuItem value="Non-essential expense">Non-essential expense</MenuItem>
-                                    <MenuItem value="Progress expense">Progress expense</MenuItem>
+                                    <MenuItem value="Essential expenses">Essential expenses</MenuItem>
+                                    <MenuItem value="Non-essential expenses">Non-essential expenses</MenuItem>
+                                    <MenuItem value="Progress expenses">Progress expenses</MenuItem>
                                 </Select>
                             </FormControl>
                         )}

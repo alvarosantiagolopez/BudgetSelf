@@ -4,7 +4,13 @@ import { Add } from '@mui/icons-material';
 import { TransactionModal, MonthNavigation } from '../../../components';
 import { SummaryCard, TransactionCard } from '../components';
 
-import { useGroupedTransactions, useMonths, useTransactionsStore, useUiStore } from '../../../hooks';
+import {
+    useGroupedTransactions,
+    useMonths,
+    useTransactionsStore,
+    useUiStore,
+    useMonthlyData
+} from '../../../hooks';
 
 export const BudgetsPage = () => {
 
@@ -15,25 +21,19 @@ export const BudgetsPage = () => {
         openTransactionModal();
     };
 
+    // Hooks
     const monthsData = useMonths();
+    const { selectedMonthFullName, selectedMonthIndex } = monthsData;
 
-    const {
-        monthData,
-        selectedMonthFullName,
-        selectedMonthIndex,
-    } = monthsData;
+    const { monthTransactions, totalIncome, totalExpenses, totalSavings }
+        = useMonthlyData(transactions, selectedMonthIndex);
 
     const transactionTypes = [
         'Income',
-        'Essential expense',
-        'Non-essential expense',
-        'Progress expense',
+        'Essential expenses',
+        'Non-essential expenses',
+        'Progress expenses',
     ];
-
-    // Filter transactions
-    const monthTransactions = transactions.filter(
-        (transaction) => new Date(transaction.date).getMonth() === selectedMonthIndex
-    );
 
     const groupedTransactions = useGroupedTransactions(monthTransactions, transactionTypes);
 
@@ -49,21 +49,21 @@ export const BudgetsPage = () => {
                 // Mobile view
                 <Grid container spacing={2} sx={{ marginBottom: '2rem' }}>
                     <Grid item xs={6}>
-                        <SummaryCard title={`${selectedMonthFullName} income`} amount={monthData.income} />
+                        <SummaryCard title={`${selectedMonthFullName} income`} amount={totalIncome} />
                     </Grid>
                     <Grid item xs={6}>
-                        <SummaryCard title={`${selectedMonthFullName} expenses`} amount={monthData.expenses} />
+                        <SummaryCard title={`${selectedMonthFullName} expenses`} amount={totalExpenses} />
                     </Grid>
                     <Grid item xs={12}>
-                        <SummaryCard title={`${selectedMonthFullName} savings`} amount={monthData.savings} />
+                        <SummaryCard title={`${selectedMonthFullName} savings`} amount={totalSavings} />
                     </Grid>
                 </Grid>
             ) : (
                 // Desktop view
                 <Grid container spacing={2} sx={{ justifyContent: 'space-evenly', marginBottom: '2rem' }}>
-                    <SummaryCard title={`${selectedMonthFullName} income`} amount={monthData.income} />
-                    <SummaryCard title={`${selectedMonthFullName} expenses`} amount={monthData.expenses} />
-                    <SummaryCard title={`${selectedMonthFullName} savings`} amount={monthData.savings} />
+                    <SummaryCard title={`${selectedMonthFullName} income`} amount={totalIncome} />
+                    <SummaryCard title={`${selectedMonthFullName} expenses`} amount={totalExpenses} />
+                    <SummaryCard title={`${selectedMonthFullName} savings`} amount={totalSavings} />
                 </Grid>
             )}
 

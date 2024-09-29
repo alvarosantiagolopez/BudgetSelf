@@ -43,51 +43,7 @@ export const useMonths = () => {
         Dec: { income: '€2,100.00', expenses: '€450.00', savings: '€1,650.00' },
     };
 
-    // Transacciones simuladas para cada mes
-    const transactions = {
-        Jan: [
-            {
-                type: 'Income',
-                paymentMethod: 'ING',
-                category: 'Paycheck',
-                date: '2024-09-01',
-                description: 'Nomina',
-                amount: '€1,980.00'
-            },
-        ],
-        Sep: [
-            {
-                type: 'Income',
-                paymentMethod: 'ING',
-                category: 'Paycheck',
-                date: '2024-09-01',
-                description: 'Nomina',
-                amount: '€2,000.00'
-            },
-            {
-                type: 'Essential expenses',
-                paymentMethod: 'ING',
-                category: 'Rent',
-                date: '2024-09-01',
-                description: 'Alquiler',
-                amount: '€500.00'
-            }, {
-                type: 'Non-essential expenses',
-                paymentMethod: 'ING',
-                category: 'Gym membership',
-                date: '2024-09-02',
-                description: 'Gym',
-                amount: '€30.00'
-            }, {
-                type: 'Progress expenses',
-                paymentMethod: 'ING',
-                category: 'Investments',
-                date: '2024-09-10',
-                description: 'Stocks',
-                amount: '€100.00'
-            },
-        ],
-    };
+    const transactions = [];
 
     // Get month data
     const monthData = data[selectedMonth] || { income: '€0.00', expenses: '€0.00', savings: '€0.00' };

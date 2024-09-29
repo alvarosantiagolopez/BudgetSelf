@@ -5,9 +5,9 @@ export const TransactionCard = ({ type, transactions = [] }) => {
 
     const typeColors = {
         'Income': 'income.main',
-        'Essential expense': 'essential.main',
-        'Non-essential expense': 'nonessential.main',
-        'Progress expense': 'progress.main',
+        'Essential expenses': 'essential.main',
+        'Non-essential expenses': 'nonessential.main',
+        'Progress expenses': 'progress.main',
     };
     const typeColor = typeColors[type] || 'primary.main';
 
