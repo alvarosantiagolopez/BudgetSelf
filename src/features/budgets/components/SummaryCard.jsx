@@ -3,6 +3,11 @@ import { Grid, Paper, Typography } from '@mui/material';
 export const SummaryCard = ({ title, amount }) => {
     const amountColor = title.toLowerCase().includes('expenses') ? 'expenses.main' : 'income.main';
 
+    const formattedAmount = amount.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    });
+
     return (
         <Grid item xs={12} sm={2}>
             <Paper
@@ -20,7 +25,7 @@ export const SummaryCard = ({ title, amount }) => {
                     {title}
                 </Typography>
                 <Typography variant="h5" sx={{ color: amountColor, fontWeight: 'bold' }}>
-                    {amount}
+                    €{formattedAmount}
                 </Typography>
             </Paper>
         </Grid>

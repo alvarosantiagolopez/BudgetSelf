@@ -1,9 +1,23 @@
 import { createSlice, nanoid } from '@reduxjs/toolkit';
 
+// Función para cargar las transacciones desde el LocalStorage
+const loadTransactions = () => {
+    try {
+        const serializedState = localStorage.getItem('transactions');
+        if (serializedState === null) {
+            return [];
+        }
+        return JSON.parse(serializedState);
+    } catch (e) {
+        console.warn('No se pudo cargar las transacciones desde el LocalStorage:', e);
+        return [];
+    }
+};
+
 export const transactionsSlice = createSlice({
     name: 'transactions',
     initialState: {
-        transactions: [],
+        transactions: loadTransactions(),
         status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
         error: null,
     },
