@@ -7,3 +7,5 @@ export * from './dashboard/pages';
 export * from './investments/pages';
 
 export * from './routes/FeaturesRoutes';
+export * from './routes/BudgetsRoutes';
+

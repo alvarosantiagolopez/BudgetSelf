@@ -27,22 +27,7 @@ export const useMonths = () => {
         Dec: 'December',
     };
 
-    // Datos simulados para cada mes
-    const data = {
-        Jan: { income: '€1,800.00', expenses: '€400.00', savings: '€1,400.00' },
-        Feb: { income: '€2,200.00', expenses: '€300.00', savings: '€1,900.00' },
-        Mar: { income: '€2,000.00', expenses: '€500.00', savings: '€1,500.00' },
-        Apr: { income: '€2,000.00', expenses: '€205.00', savings: '€1,795.00' },
-        May: { income: '€2,100.00', expenses: '€450.00', savings: '€1,650.00' },
-        Jun: { income: '€1,950.00', expenses: '€350.00', savings: '€1,600.00' },
-        Jul: { income: '€2,050.00', expenses: '€400.00', savings: '€1,650.00' },
-        Aug: { income: '€2,100.00', expenses: '€300.00', savings: '€1,800.00' },
-        Sep: { income: '€2,000.00', expenses: '€630.00', savings: '€1,370.00' },
-        Oct: { income: '€2,200.00', expenses: '€400.00', savings: '€1,800.00' },
-        Nov: { income: '€2,000.00', expenses: '€350.00', savings: '€1,650.00' },
-        Dec: { income: '€2,100.00', expenses: '€450.00', savings: '€1,650.00' },
-    };
-
+    const data = {};
     const transactions = [];
 
     // Get month data

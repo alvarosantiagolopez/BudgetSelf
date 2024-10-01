@@ -1,26 +1,16 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { BanksPage, BudgetsPage, CalculatorsPage, DashboardPage, InvestmentsPage } from '../../features'
-import { NavBar } from '../../components/NavBar';
-
-
+import { BanksPage, CalculatorsPage, DashboardPage, InvestmentsPage } from '../../features';
 
 export const FeaturesRoutes = () => {
     return (
-        <>
+        <Routes>
+            <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="banks" element={<BanksPage />} />
+            <Route path="investments" element={<InvestmentsPage />} />
+            <Route path="calculators" element={<CalculatorsPage />} />
 
-            <NavBar />
-
-            <Routes>
-                <Route path="dashboard" element={<DashboardPage />} />
-                <Route path="budgets" element={<BudgetsPage />} />
-                <Route path="banks" element={<BanksPage />} />
-                <Route path="investments" element={<InvestmentsPage />} />
-                <Route path="calculators" element={< CalculatorsPage />} />
-
-                <Route path="/*" element={<Navigate to="/dashboard" />} />
-
-            </Routes>
-
-        </>
-    )
-}
+            {/* Redirigir rutas no coincidentes */}
+            <Route path="*" element={<Navigate to="/dashboard" />} />
+        </Routes>
+    );
+};

@@ -1,23 +1,17 @@
+// src/router/AppRouter.jsx
+
 import { Route, Routes } from 'react-router-dom';
 import { AuthRoutes } from '../auth/routes/AuthRoutes';
-import { FeaturesRoutes } from '../features';
-
-
+import { PrivateRoutes } from './PrivateRoutes';
 
 export const AppRouter = () => {
     return (
-        <>
-            <Routes>
+        <Routes>
+            {/* Public routes */}
+            <Route path="/auth/*" element={<AuthRoutes />} />
 
-                {/* Login and Register */}
-                <Route path="auth/*" element={<AuthRoutes />} />
-
-                {/* BudgetApp */}
-                <Route path="/*" element={<FeaturesRoutes />} />
-
-            </Routes>
-
-
-        </>
-    )
-}
+            {/* Private routes */}
+            <Route path="/*" element={<PrivateRoutes />} />
+        </Routes>
+    );
+};
