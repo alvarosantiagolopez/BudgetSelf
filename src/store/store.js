@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { uiSlice, transactionsSlice } from './';
+import { uiSlice, transactionsSlice, authSlice } from './';
 
 
 // Save in LocalStorage
@@ -28,6 +28,7 @@ const localStorageMiddleware = ({ getState }) => (next) => (action) => {
 
 export const store = configureStore({
     reducer: {
+        auth: authSlice.reducer,
         transactions: transactionsSlice.reducer,
         ui: uiSlice.reducer
     },
