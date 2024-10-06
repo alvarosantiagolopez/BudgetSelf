@@ -1,11 +1,6 @@
-import { Toolbar, Typography } from "@mui/material"
+import { BudgetLayout } from "../layout/BudgetLayout";
 
 
 export const EssentialExpensesPage = () => {
-    return (
-        <>
-            <Toolbar />
-            <Typography variant='h1'>EssentialExpensesPage</Typography>
-        </>
-    )
-}
+    return <BudgetLayout type="Essential" />;
+};

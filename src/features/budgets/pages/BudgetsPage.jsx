@@ -1,7 +1,7 @@
-import { Box, Grid, IconButton, Typography, useMediaQuery } from '@mui/material';
+import { Box, Grid, useMediaQuery } from '@mui/material';
 import { Add } from '@mui/icons-material';
 
-import { TransactionModal, MonthNavigation } from '../../../components';
+import { TransactionModal, MonthNavigation, LabelButton } from '../../../components';
 import { SummaryCard, TransactionCard } from '../components';
 
 import {
@@ -41,7 +41,7 @@ export const BudgetsPage = () => {
     const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
     return (
-        <Box sx={{ padding: '2rem', minHeight: '100vh', paddingTop: { xs: '5rem', md: '6rem' } }}>
+        <Box sx={{ padding: '2rem', minHeight: '100vh', paddingTop: '5rem' }}>
             <MonthNavigation monthsData={monthsData} />
 
             {/* Summary cards */}
@@ -60,7 +60,7 @@ export const BudgetsPage = () => {
                 </Grid>
             ) : (
                 // Desktop view
-                <Grid container spacing={2} sx={{ justifyContent: 'space-evenly', marginBottom: '2rem' }}>
+                <Grid container spacing={2} sx={{ justifyContent: 'space-evenly', marginBottom: '1.5rem' }}>
                     <SummaryCard title={`${selectedMonthFullName} income`} amount={totalIncome} />
                     <SummaryCard title={`${selectedMonthFullName} expenses`} amount={totalExpenses} />
                     <SummaryCard title={`${selectedMonthFullName} savings`} amount={totalSavings} />
@@ -68,41 +68,21 @@ export const BudgetsPage = () => {
             )}
 
             {/* Add button */}
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    marginBottom: '2rem',
-                }}
-            >
-                <IconButton
-                    color="primary"
-                    disableRipple
-                    sx={{
-                        backgroundColor: 'primary.main',
-                        color: '#fff',
-                        padding: '1rem',
-                        borderRadius: '50%',
-                        '&:hover': {
-                            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-                        },
-                    }}
-                    onClick={onAddClick}
-                >
-                    <Add />
-                </IconButton>
-                <Typography sx={{ marginTop: '0.2rem' }}>New</Typography>
-            </Box>
+            <LabelButton icon={<Add />} label={'New'} onClick={onAddClick} />
 
             {/* Transactions cards */}
-            <Grid container spacing={3}>
+            <Grid
+                container
+                spacing={4}
+                justifyContent="center"
+            >
                 {transactionTypes.map((type, index) => (
-                    <TransactionCard
-                        key={index}
-                        type={type}
-                        transactions={groupedTransactions[type]}
-                    />
+                    <Grid item key={index} zeroMinWidth>
+                        <TransactionCard
+                            type={type}
+                            transactions={groupedTransactions[type]}
+                        />
+                    </Grid>
                 ))}
             </Grid>
 

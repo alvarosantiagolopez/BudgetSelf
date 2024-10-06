@@ -1,12 +1,6 @@
-import { Toolbar, Typography } from "@mui/material"
+import { BudgetLayout } from "../layout/BudgetLayout";
 
 
 export const ProgressExpensesPage = () => {
-    return (
-        <>
-            <Toolbar />
-            <Typography variant='h1'>ProgressExpensesPage</Typography>
-        </>
-    )
-}
-
+    return <BudgetLayout type="Progress" />;
+};
