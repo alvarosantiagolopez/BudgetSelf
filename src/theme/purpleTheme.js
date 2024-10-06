@@ -32,5 +32,8 @@ export const purpleTheme = createTheme({
             //main: '#2690D7'
             main: '#60B1F2'
         },
+        text: {
+            primary: '#000000',
+        },
     }
 })
