@@ -1,37 +1,35 @@
 import { useState } from 'react';
-import {
-    Box,
-    Typography,
-    Accordion,
-    AccordionSummary,
-    AccordionDetails,
-    IconButton,
-    Grid,
-    useMediaQuery,
-} from '@mui/material';
-import { Category, ExpandMore, Edit, Delete } from '@mui/icons-material';
+import { Box, Typography, Accordion, AccordionSummary, AccordionDetails, IconButton, Grid, useMediaQuery } from '@mui/material';
+import { Category as CategoryIcon, ExpandMore, Edit, Delete } from '@mui/icons-material';
+import { format } from 'date-fns';
 
-export const CategoryAccordion = () => {
+export const CategoryAccordion = ({ transactions }) => {
+
     const [expanded, setExpanded] = useState(false);
 
     const handleChange = (event, isExpanded) => {
         setExpanded(isExpanded);
     };
 
+    const transactionsByCategory = transactions.reduce((groups, transaction) => {
+        const category = transaction.category;
+        if (!groups[category]) {
+            groups[category] = [];
+        }
+        groups[category].push(transaction);
+        return groups;
+    }, {});
+
     const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
-    const items = [
-        {
-            name: 'Nómina',
-            date: 'October 1',
-            amount: '€1,800.00',
-        },
-        {
-            name: 'Extra',
-            date: 'October 2',
-            amount: '€200.00',
-        },
-    ];
+    //TODO: Category real
+    const category = 'Paycheck';
+    const items = transactionsByCategory[category] || [];
+
+    // Summary amounts
+    const totalAmount = items.reduce((sum, item) => sum + item.amount, 0);
+    const targetAmount = 2080; //TODO: Real value
+    const difference = totalAmount - targetAmount;
 
     return (
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -46,9 +44,7 @@ export const CategoryAccordion = () => {
                 }}
             >
                 <AccordionSummary
-                    expandIcon={
-                        <ExpandMore sx={{ color: expanded ? 'white' : 'primary.main' }} />
-                    }
+                    expandIcon={<ExpandMore sx={{ color: expanded ? 'white' : 'primary.main' }} />}
                 >
                     <Box
                         sx={{
@@ -58,9 +54,9 @@ export const CategoryAccordion = () => {
                             width: '100%',
                         }}
                     >
-                        {/* Category icon and name*/}
+                        {/* Category's name and icon */}
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                            <Category sx={{ color: expanded ? 'white' : 'primary.main' }} />
+                            <CategoryIcon sx={{ color: expanded ? 'white' : 'primary.main' }} />
                             <Typography
                                 variant="h6"
                                 sx={{
@@ -69,11 +65,11 @@ export const CategoryAccordion = () => {
                                     color: expanded ? 'white' : 'black',
                                 }}
                             >
-                                Paycheck
+                                {category}
                             </Typography>
                         </Box>
 
-                        {/* Summary amount */}
+                        {/* Total sum y target */}
                         <Typography
                             variant="h6"
                             sx={{
@@ -82,7 +78,7 @@ export const CategoryAccordion = () => {
                                 fontSize: { xs: '1rem', sm: '1.25rem' },
                             }}
                         >
-                            €2,000.00/€2,080.00
+                            €{totalAmount.toFixed(2)}/€{targetAmount.toFixed(2)}
                         </Typography>
                     </Box>
                 </AccordionSummary>
@@ -93,100 +89,88 @@ export const CategoryAccordion = () => {
                         padding: '1rem',
                     }}
                 >
-                    {isMobile ? (
-                        // Mobile view
-                        <>
-                            {items.map((item, index) => (
-                                <Grid
-                                    container
-                                    alignItems="center"
-                                    spacing={1}
-                                    key={index}
-                                    sx={{ marginBottom: '1rem' }}
-                                >
-                                    <Grid item xs={6}>
-                                        <Typography sx={{ fontWeight: 'bold' }}>
-                                            {item.name}
-                                        </Typography>
+                    {/* Target's difference */}
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            mb: 2,
+                        }}
+                    >
+                        <Typography variant="body2" sx={{ fontWeight: 'bold', mr: 1 }}>
+                            Target's difference
+                        </Typography>
+                        <Typography
+                            sx={{
+                                fontWeight: 'bold',
+                                color: difference >= 0 ? 'income.main' : 'expenses.main',
+                            }}
+                        >
+                            {difference >= 0
+                                ? `€${difference.toFixed(2)}`
+                                : `-€${Math.abs(difference).toFixed(2)}`}
+                        </Typography>
+                    </Box>
+
+                    {/* Transactions list */}
+                    {items.map((item, index) => {
+
+                        const formattedDate = format(new Date(item.date), 'd MMMM');
+                        console.log(items)
+                        return (
+                            <Grid
+                                container
+                                alignItems="center"
+                                spacing={isMobile ? 1 : 2}
+                                key={index}
+                                sx={{ marginBottom: isMobile ? '1rem' : index !== items.length - 1 ? '1.5rem' : 0 }}
+                            >
+                                {/* Transacción y fecha */}
+                                <Grid item xs={6} md={7}>
+                                    <Box
+                                        sx={{
+                                            alignContent: 'center',
+                                            textAlign: 'center',
+                                            marginLeft: isMobile ? 0 : ''
+                                        }}
+                                    >
+                                        <Typography sx={{ fontWeight: 'bold' }}>{item.description}</Typography>
                                         <Typography variant="body2" sx={{ color: 'gray' }}>
-                                            {item.date}
+                                            {formattedDate}
                                         </Typography>
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <Typography
-                                            sx={{
-                                                color: 'income.main',
-                                                fontWeight: 'bold',
-                                                textAlign: 'right',
-                                            }}
-                                        >
-                                            {item.amount}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs={2} sx={{ textAlign: 'right' }}>
+                                    </Box>
+                                </Grid>
+
+                                {/* Amount */}
+                                <Grid item xs={4} md={2}>
+                                    <Typography
+                                        sx={{
+                                            color: 'income.main',
+                                            fontWeight: 'bold',
+                                            textAlign: 'right',
+                                            marginRight: isMobile ? 0 : '3.5rem',
+                                        }}
+                                    >
+                                        €{item.amount.toFixed(2)}
+                                    </Typography>
+                                </Grid>
+
+                                {/* Action buttons */}
+                                <Grid item xs={2} md={2}>
+                                    <Box sx={{ textAlign: 'right' }}>
                                         <IconButton color="primary">
                                             <Edit />
                                         </IconButton>
                                         <IconButton color="error">
                                             <Delete />
                                         </IconButton>
-                                    </Grid>
+                                    </Box>
                                 </Grid>
-                            ))}
-                        </>
-                    ) : (
-                        // Desktop view
-                        <>
-                            {items.map((item, index) => (
-                                <Grid
-                                    container
-                                    alignItems="center"
-                                    justifyContent="center"
-                                    spacing={2}
-                                    key={index}
-                                    sx={{ marginBottom: index !== items.length - 1 ? '1.5rem' : 0 }}
-                                >
-                                    {/* Transaction and date */}
-                                    <Grid item md={4}>
-                                        <Box sx={{ textAlign: 'left', marginLeft: '15rem', }}>
-                                            <Typography sx={{ fontWeight: 'bold' }}>
-                                                {item.name}
-                                            </Typography>
-                                            <Typography variant="body2" sx={{ color: 'gray' }}>
-                                                {item.date}
-                                            </Typography>
-                                        </Box>
-                                    </Grid>
 
-                                    {/* Amount*/}
-                                    <Grid item md={3}>
-                                        <Typography
-                                            sx={{
-                                                color: 'income.main',
-                                                fontWeight: 'bold',
-                                                textAlign: 'right',
-                                                marginRight: '5rem',
-                                            }}
-                                        >
-                                            {item.amount}
-                                        </Typography>
-                                    </Grid>
-
-                                    {/* Icons */}
-                                    <Grid item md={2}>
-                                        <Box sx={{ textAlign: 'end' }}>
-                                            <IconButton color="primary">
-                                                <Edit />
-                                            </IconButton>
-                                            <IconButton color="error">
-                                                <Delete />
-                                            </IconButton>
-                                        </Box>
-                                    </Grid>
-                                </Grid>
-                            ))}
-                        </>
-                    )}
+                            </Grid>
+                        );
+                    })}
                 </AccordionDetails>
             </Accordion>
         </Box>
