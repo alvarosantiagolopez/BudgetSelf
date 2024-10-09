@@ -1,6 +1,6 @@
-
 import { Box, Grid, useMediaQuery } from '@mui/material';
 import { Add, Category, Flag } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 import {
     TransactionModal,
@@ -15,24 +15,43 @@ import {
     useTransactionsStore,
     useUiStore,
     useMonthlyData,
+    useGroupedTransactions,
 } from '../../../hooks';
 
 export const BudgetLayout = ({ type }) => {
     const { openTransactionModal } = useUiStore();
     const { transactions } = useTransactionsStore();
+    const navigate = useNavigate();
 
     const onAddClick = () => {
         openTransactionModal();
+    };
+
+    const handleBackClick = () => {
+        navigate('/budgets');
     };
 
     // Hooks
     const monthsData = useMonths();
     const { selectedMonthFullName, selectedMonthIndex } = monthsData;
 
-    const { monthTransactions, totalIncome, totalExpenses, totalSavings } = useMonthlyData(
-        transactions,
-        selectedMonthIndex
+    // Filtrar transacciones del mes seleccionado
+    const monthTransactions = transactions.filter(
+        (transaction) =>
+            new Date(transaction.date).getMonth() === selectedMonthIndex &&
+            new Date(transaction.date).getFullYear() === new Date().getFullYear()
     );
+
+    // Utilizar 'useGroupedTransactions' para obtener las transacciones del tipo actual
+    const transactionTypes = [type];
+    const groupedTransactions = useGroupedTransactions(monthTransactions, transactionTypes);
+
+    // Obtener las transacciones filtradas por tipo
+    const filteredTransactions = groupedTransactions[type] || [];
+
+    // Calcular totales
+    const totalAmount = filteredTransactions.reduce((sum, transaction) => sum + transaction.amount, 0);
+
 
     const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
@@ -42,24 +61,23 @@ export const BudgetLayout = ({ type }) => {
 
             {/* Summary Cards */}
             {isMobile ? (
-                // Mobile view
                 <Grid container spacing={2} sx={{ marginBottom: '2rem' }}>
                     <Grid item xs={6}>
-                        <SummaryCard title={`${selectedMonthFullName} ${type.toLowerCase()}`} amount={totalIncome} />
+                        <SummaryCard title={`${selectedMonthFullName} ${type.toLowerCase()}`} amount={totalAmount} />
                     </Grid>
                     <Grid item xs={6}>
-                        <SummaryCard title={`${selectedMonthFullName} target`} amount={totalExpenses} />
+                        <SummaryCard title={`${selectedMonthFullName} target`} amount={0} />
                     </Grid>
                     <Grid item xs={12}>
-                        <SummaryCard title={`${selectedMonthFullName} difference`} amount={totalSavings} />
+                        <SummaryCard title={`${selectedMonthFullName} difference`} amount={0} />
                     </Grid>
                 </Grid>
             ) : (
                 // Desktop view
                 <Grid container spacing={2} sx={{ justifyContent: 'space-evenly', marginBottom: '3rem' }}>
-                    <SummaryCard title={`${selectedMonthFullName} ${type.toLowerCase()}`} amount={totalIncome} />
-                    <SummaryCard title={`${selectedMonthFullName} target`} amount={totalExpenses} />
-                    <SummaryCard title={`${selectedMonthFullName} difference`} amount={totalSavings} />
+                    <SummaryCard title={`${selectedMonthFullName} ${type.toLowerCase()}`} amount={totalAmount} />
+                    <SummaryCard title={`${selectedMonthFullName} target`} amount={0} />
+                    <SummaryCard title={`${selectedMonthFullName} difference`} amount={0} />
                 </Grid>
             )}
 
@@ -71,7 +89,7 @@ export const BudgetLayout = ({ type }) => {
             </Box>
 
 
-            <CategoryAccordion />
+            <CategoryAccordion transactions={filteredTransactions} />
 
             <TransactionModal />
         </Box>

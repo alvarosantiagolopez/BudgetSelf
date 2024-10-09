@@ -2,5 +2,5 @@ import { BudgetLayout } from "../layout/BudgetLayout";
 
 
 export const EssentialExpensesPage = () => {
-    return <BudgetLayout type="Essential" />;
+    return <BudgetLayout type="Essential expenses" />;
 };
